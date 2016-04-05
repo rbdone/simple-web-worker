@@ -1,0 +1,34 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.8.2/lodash.js"></script>
+</head>
+<body>
+
+<input id="bigProcess" type="button" value="Do something Big" /><br />
+<input id="smallProcess" type="button" value="Do something Small" /><br />
+
+
+<script>
+    var worker = new Worker('doSomethingBigWorker.js');
+    worker.addEventListener('message', function (event) {
+        console.log(event.data);
+    }, false);
+
+    function _doSomethingBig(value) {
+        worker.postMessage({functionToRun: 'somethingBig', startingValue: value});
+    }
+
+    function _doSomethingSmall() {
+        if (document.body.style.background === 'limegreen') {
+            document.body.style.background = 'red';
+        } else {
+            document.body.style.background = 'limegreen';
+        }
+    }
+
+    document.getElementById('bigProcess').addEventListener('click', _doSomethingBig.bind(this, 1));
+    document.getElementById('smallProcess').addEventListener('click', _doSomethingSmall);
+
+</script>
+</body>
+</html>
